@@ -46,19 +46,21 @@ Summary statistics table (mean, median, standard deviation, sample size)
 ```{r}
 summary_statistics <- urchins %>% 
   group_by(common_name) %>% 
-summarize(mean_size = mean(size),
-          max_size = max(size),
+  summarize(mean_size = mean(size),
+          median_size = median(size),
           standard_deviation = sd(size), 
           sample_size = n())
 
-final_table <- summary_statistics
-  kable(caption = "Table 1. Statistics for Sea Urchin Data"
-        digits = c(2,2,2,2,2)
-        col.names = c("Species",
+final_table <- summary_statistics %>% 
+  kable(caption = "Table 1: Statistics for Sea Urchin Data",
+        digits = c(2,2,2,2),
+        col.names = c("Color",
                       "Mean body size (cm)",
-                      "Max body size (cm)",
-                      "Standard deviation of body size",
-                      "Sample size (n)"))
-
+                      "Median body size (cm)",
+                      "Standard deviation of body size (cm)",
+                      "Sample size (n)")) %>% 
+    kable_styling(full_width = FALSE)
+  
+final_table
 ```
 
