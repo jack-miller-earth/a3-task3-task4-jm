@@ -39,3 +39,26 @@ theme_minimal() +
 ```
 
 **Figure 1. This is a histogram of the size distribution of red and purple urchins, taken from 5 sampling sites along the Santa Barbara coast.**
+
+## Descriptive Statistics Table 
+Summary statistics table (mean, median, standard deviation, sample size)
+
+```{r}
+summary_statistics <- urchins %>% 
+  group_by(common_name) %>% 
+summarize(mean_size = mean(size),
+          max_size = max(size),
+          standard_deviation = sd(size), 
+          sample_size = n())
+
+final_table <- summary_statistics
+  kable(caption = "Table 1. Statistics for Sea Urchin Data"
+        digits = c(2,2,2,2,2)
+        col.names = c("Species",
+                      "Mean body size (cm)",
+                      "Max body size (cm)",
+                      "Standard deviation of body size",
+                      "Sample size (n)"))
+
+```
+
