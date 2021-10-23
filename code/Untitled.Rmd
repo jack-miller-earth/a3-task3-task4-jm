@@ -1,0 +1,41 @@
+---
+title: "assignemnt3_task3_jack_miller"
+author: "Jack Miller"
+date: "10/23/2021"
+output: html_document
+---
+## Set-up
+```{r setup, include=FALSE, warning = FALSE, message = FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+
+library(tidyverse)
+library(here)
+library(janitor)
+```
+
+## Read in the Data 
+```{r}
+urchins <- read_csv(here("data", "urchins.csv")) %>% 
+  clean_names
+```
+
+
+# Section 1 
+
+### Data Visualization 
+Histogram of the of the distribution of sizes between purple and red urchins.
+
+```{r}
+ggplot(data = urchins,
+       aes(x = size)) +
+  geom_histogram(bins = 10, aes(fill = common_name)) +
+  scale_fill_manual(values = c("purple", "red")) +
+theme_minimal() + 
+  labs(x = "Size (cm)",
+       y = "Number",
+       title = "Size Distribution of Red and Purple Urchins",
+       fill = "Key") +
+  facet_wrap(~ common_name)
+```
+
+**Figure 1. This is a histogram of the size distribution of red and purple urchins, taken from 5 sampling sites along the Santa Barbara coast.**
