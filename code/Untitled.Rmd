@@ -11,6 +11,8 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 library(tidyverse)
 library(here)
 library(janitor)
+library(kableExtra)
+library(lubridate)
 ```
 
 ## Read in the Data 
@@ -52,15 +54,55 @@ summary_statistics <- urchins %>%
           sample_size = n())
 
 final_table <- summary_statistics %>% 
-  kable(caption = "Table 1: Statistics for Sea Urchin Data",
-        digits = c(2,2,2,2),
-        col.names = c("Color",
-                      "Mean body size (cm)",
-                      "Median body size (cm)",
-                      "Standard deviation of body size (cm)",
-                      "Sample size (n)")) %>% 
+  kable(caption = "Table 1: Statistics for Sea Urchin Data", 
+        digits = c(2,2,2,2), # makes it so there is 2 decimals in the table 
+        col.names = c("Color", # column name
+                      "Mean body size (cm)", # column name
+                      "Median body size (cm)", # column name
+                      "Standard deviation of body size (cm)", # column name
+                      "Sample size (n)")) %>%  # column name
     kable_styling(full_width = FALSE)
   
 final_table
 ```
+For the purple urchins, the distribution is between 0 and 9 cm, the central tendency is around 5 cm, and the standard deviation is 1.89 - resulting in a larger spread. For the red urchins, the body sizes appear to be more normally distributed, the central tendency is around 7 cm, and the standard deviation is 1.18 - resulting in a smaller spread
+
+## Section 2
+Explore purple urchin counts by site and year.
+
+```{r}
+purple_urchins <- urchins %>% 
+  filter(common_name == "Purple Urchin") %>% # filter to only include purple urchin observations
+  mutate(converted_dates = mdy(date)) %>% # convert the date to class "Date"
+  mutate(year_date = year(converted_dates)) %>% # create a new column that only contains the year 
+           mutate(site_full = case_when( # create a new column that contains the full name for the 5 sites
+             site == "NAPL" ~ "Naples Reef", 
+             site == "AQUE" ~ "Arroyo Quemado Reef",
+             site == "CARP" ~ "Carpinteria Reef",
+             site == "MOHK" ~ "Mohawk Reef", 
+             site == "IVEE" ~ "Isla Vista Reef"
+           ))
+```
+
+Table containing e total number of purple urchins observed by site or year 
+```{r}
+purple_urchin_table <- purple_urchins %>% 
+  group_by(site_full, year_date) %>% # stores a table of purple urchins observed by site and year 
+  summarize(count = n())
+```
+
+Finalized Graph
+```{r}
+ggplot(data = purple_urchin_table,
+       aes(x = year_date, y = count)) + 
+  geom_col(width = 0.3,
+           aes(fill = site_full)) +
+  labs(x = "Year", y = "Number of Purple Urchins", title = "Total Number of Purple Urchins Observed by Site and Year", fill = "Site") +
+  theme_classic() +
+  facet_wrap(~ site_full)
+
+```
+**Figure 2. This is a column graph that displays the total number of purple urchins observed at 5 sampling sites along the Santa Barabara Coast.**
+
+This graph reflects changes in the purple urchin population (ie: as time passes, the purple urchin population has been decreasing). I would need to take into account the  to determine whether the changes in counts by year are reflective of actual changes in urchin population. Another possible explanation of the changes in purple urchin population include oil spills.
 
