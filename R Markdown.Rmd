@@ -1,0 +1,58 @@
+---
+title: "a3_task4_jack_miller"
+author: "Jack Miller"
+date: "10/24/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(here)
+library(janitor)
+library(lubridate)
+```
+
+## Read in the Data 
+
+```{r}
+purple_urchins <- read_csv(here("data", "urchins.csv"))
+```
+
+## Mean Size Comparison
+
+```{r}
+urchins_subset <- urchins %>% 
+  filter(common_name == "Purple Urchin") %>% 
+  filter(site == "NAPL") %>% 
+  mutate(new_date = mdy(date)) %>% 
+  mutate(year_date = year(new_date)) %>% 
+  filter(year_date == 2010) %>% 
+  group_by(treatment) %>% 
+  summarize(mean_size = mean(size))
+
+ggplot(data = urchins_subset,
+       aes(y = mean_size, x = treatment, fill = treatment, width = .25)) + 
+  geom_col(show.legend = FALSE) +
+  scale_x_discrete(labels = c("Giant Kelp Removal", "No Giant Kelp Removal")) +
+  theme_classic() + 
+  labs(y = "Size (cm)", 
+       x = "Treatment",
+       title = "Mean Size of Purple Urchins - No Giant Kelp Removal vs Giant Kelp Removal",
+       fill = "Treatment") 
+```
+
+
+```{r}
+ggplot(data = urchins_subset,
+       aes(y = mean_size)) + 
+  geom_histogram() +
+  theme_classic() + 
+  labs(y = "Size (cm)", 
+       x = "Treatment",
+       title = "Mean Size of Purple Urchins - No Giant Kelp Removal vs Giant Kelp Removal",
+       fill = "Treatment")  + 
+  facet_wrap(~ treatment)
+```
+

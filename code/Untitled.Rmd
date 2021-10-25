@@ -104,5 +104,7 @@ ggplot(data = purple_urchin_table,
 ```
 **Figure 2. This is a column graph that displays the total number of purple urchins observed at 5 sampling sites along the Santa Barabara Coast.**
 
-This graph reflects changes in the purple urchin population (ie: as time passes, the purple urchin population has been decreasing). I would need to take into account the  to determine whether the changes in counts by year are reflective of actual changes in urchin population. Another possible explanation of the changes in purple urchin population include oil spills.
+This graph reflects changes in the purple urchin population (ie: as time passes, the purple urchin population has been decreasing). I would need to take into account whether the data collection method has remained consistent to determine whether the changes in counts by year are reflective of actual changes in urchin population. Another possible explanation of the changes in purple urchin population include oil spills.
+
+
 
